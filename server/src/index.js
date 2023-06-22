@@ -10,7 +10,7 @@ const app = express();
 connectDB(process.env.MONGO_DB_URL);
 
 app.use(cors());
-app.use(express.json({limit: '50mb'}));
+app.use(express.json());
 
 app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/dalle', dalleRoutes);

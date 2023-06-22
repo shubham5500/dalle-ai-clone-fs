@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 import { Configuration, OpenAIApi } from "openai";
 
-dotenv.config();
+dotenv.config({path: '.env.localhost'});
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-router.route("/").get(async (req, res) => {
+router.route("/").post(async (req, res) => {
   const { prompt } = req.body;
 
   try {
