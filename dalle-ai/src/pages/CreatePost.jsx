@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormField, Loader } from "../components";
 import { useNavigate } from "react-router-dom";
 import { preview } from "../assets";
-import { getRandomPrompt } from "../utils";
+import { BASE_URL, getRandomPrompt } from "../utils";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -26,7 +26,23 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   };
 
-  const generateImage = () => {};
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImageFlag(true);
+        const response = await fetch(`${BASE_URL}/api/v1/dalle`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+        const jsonRes = await response.json();
+        console.log({ jsonRes });
+        // setForm((prev) => ({...prev, photo: response.json()}))
+      } catch (error) {}
+    }
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -79,6 +95,7 @@ const CreatePost = () => {
         </div>
         <div className="">
           <button
+            type="button"
             className="bg-green-700 w-full rounded px-4 py-2 text-white my-3 text-sm"
             onClick={generateImage}
           >
@@ -89,7 +106,10 @@ const CreatePost = () => {
           <p className="text-sm text-greyish mb-3">
             Once you've generated the image, you can share it with community...
           </p>
-          <button className="w-full py-2 text-white bg-purple text-sm rounded">
+          <button
+            type="button"
+            className="w-full py-2 text-white bg-purple text-sm rounded"
+          >
             {loading ? "Sharing" : "Share"}
           </button>
         </div>
